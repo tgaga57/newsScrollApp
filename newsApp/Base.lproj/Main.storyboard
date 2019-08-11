@@ -64,6 +64,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="565" y="21"/>
         </scene>
         <!--News View Controller-->
         <scene sceneID="ig0-7U-WiK">
@@ -72,13 +73,67 @@
                     <view key="view" contentMode="scaleToFill" id="YKj-hv-WG8">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <wkWebView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5ti-e1-3Os">
+                                <rect key="frame" x="0.0" y="44" width="414" height="768"/>
+                                <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <wkWebViewConfiguration key="configuration">
+                                    <audiovisualMediaTypes key="mediaTypesRequiringUserActionForPlayback" none="YES"/>
+                                    <wkPreferences key="preferences"/>
+                                </wkWebViewConfiguration>
+                            </wkWebView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bgF-Ho-8pi">
+                                <rect key="frame" x="0.0" y="812" width="414" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="Tl6-I7-13X"/>
+                                </constraints>
+                                <items>
+                                    <barButtonItem title="Item" systemItem="cancel" id="1w7-Jk-tcE">
+                                        <connections>
+                                            <action selector="cancel:" destination="NSL-Cb-dhb" id="JKi-Qe-bxa"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="jEc-S8-FNb"/>
+                                    <barButtonItem title="&lt;-" id="RCP-Rl-qIz">
+                                        <connections>
+                                            <action selector="backPage:" destination="NSL-Cb-dhb" id="9Ru-8v-47v"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="KMd-Te-d5p"/>
+                                    <barButtonItem title="-&gt;" id="arf-b2-qO2">
+                                        <connections>
+                                            <action selector="nextPage:" destination="NSL-Cb-dhb" id="Yty-ii-Nw1"/>
+                                        </connections>
+                                    </barButtonItem>
+                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Vhm-JR-KA1"/>
+                                    <barButtonItem systemItem="refresh" id="6q6-uX-EV2">
+                                        <connections>
+                                            <action selector="refresh:" destination="NSL-Cb-dhb" id="phU-SV-x9b"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="bgF-Ho-8pi" firstAttribute="leading" secondItem="glC-4W-MtR" secondAttribute="leading" id="59Z-Fb-iM8"/>
+                            <constraint firstItem="glC-4W-MtR" firstAttribute="trailing" secondItem="5ti-e1-3Os" secondAttribute="trailing" id="8Br-OY-G1r"/>
+                            <constraint firstItem="5ti-e1-3Os" firstAttribute="leading" secondItem="glC-4W-MtR" secondAttribute="leading" id="F2c-81-MTZ"/>
+                            <constraint firstItem="bgF-Ho-8pi" firstAttribute="trailing" secondItem="glC-4W-MtR" secondAttribute="trailing" id="bNN-ea-f4M"/>
+                            <constraint firstItem="bgF-Ho-8pi" firstAttribute="top" secondItem="5ti-e1-3Os" secondAttribute="bottom" id="e8C-PX-AWn"/>
+                            <constraint firstItem="5ti-e1-3Os" firstAttribute="top" secondItem="glC-4W-MtR" secondAttribute="top" id="i6P-4W-tyx"/>
+                            <constraint firstItem="glC-4W-MtR" firstAttribute="bottom" secondItem="bgF-Ho-8pi" secondAttribute="bottom" id="i7e-bB-fsY"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="glC-4W-MtR"/>
                     </view>
+                    <connections>
+                        <outlet property="toolBar" destination="bgF-Ho-8pi" id="TxJ-XE-iuu"/>
+                        <outlet property="webView" destination="5ti-e1-3Os" id="go9-wr-hnc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="v99-22-O5E" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1064" y="25"/>
+            <point key="canvasLocation" x="1535" y="21"/>
         </scene>
     </scenes>
 </document>
