@@ -24,8 +24,17 @@ UITableViewDataSource,UITableViewDelegate,WKNavigationDelegate,XMLParserDelegate
     //記事の情報の配列の入れ物
     var articles: [Any] = []
     
+    // XMLファイルに解析をかけた情報
+    var elements = NSMutableDictionary()
+    // XMLファイルのタグ情報
+    var element: String = ""
+    // XMLファイルのタイトル情報
+    var titleString: String = ""
+    // XMLファイルのリンク情報
+    var linkString: String = ""
     
-    // webciew
+    
+    // webview
     @IBOutlet weak var webView: WKWebView!
     
     
@@ -64,12 +73,16 @@ UITableViewDataSource,UITableViewDelegate,WKNavigationDelegate,XMLParserDelegate
         webView.isHidden = true
         toolBar.isHidden = true
         
+        
+        parserUrl()
+        
     }
     
     func parserUrl() {
         // url型にチェンジー
         let urlToSend: URL = URL(string: url)!
         
+        // パースはurlを解析するやつ？
         // parserに解析対象のurlを格納
         parser = XMLParser(contentsOf: urlToSend)!
         
@@ -84,7 +97,50 @@ UITableViewDataSource,UITableViewDelegate,WKNavigationDelegate,XMLParserDelegate
     }
     
     
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String] = [:]) {
+        
+        // elementNameにタグの名前が入ってくるのでelemetに代入
+        
+        element = elementName
+        
+        // タグにitemがあるとき
+        if element == "item" {
+            
+            // 初期化
+            elements = [:]
+            titleString = ""
+            linkString = ""
+        }
+    }
     
+    
+    
+    func parser(_ parser: XMLParser, foundCharacters string: String) {
+        if element == "title" {
+            // stringにタイトルが入っているのでappend
+            titleString.append(string)
+        } else if element == "link" {
+            linkString.append(string)
+        }
+    }
+    
+    // 終了タグを見つけた時
+    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
+        // アイテムという要素の中にあるなら、
+        if elementName == "item" {
+            // titleString,linkStringの中身が空でないなら
+            if titleString != "" {
+                // elementsに"title"、"Link"というキー値を付与しながらtitleString,linkStringをセット
+                elements.setObject(titleString, forKey: "title" as NSCopying)
+            }
+            if linkString != "" {
+                elements.setObject(linkString, forKey: "link" as NSCopying)
+            }
+            
+            // articlesの中にelementsを入れる
+            articles.append(elements)
+        }
+    }
     
     // セルの高さ
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -104,6 +160,7 @@ UITableViewDataSource,UITableViewDelegate,WKNavigationDelegate,XMLParserDelegate
         
         // セルの色
         cell.backgroundColor = #colorLiteral(red: 1, green: 0.8633072972, blue: 1, alpha: 1)
+        
         // テキストサイズとフォント
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 15)
         cell.textLabel?.textColor = #colorLiteral(red: 0.3451225162, green: 0.333977282, blue: 0.5054458976, alpha: 1)
@@ -131,7 +188,6 @@ UITableViewDataSource,UITableViewDelegate,WKNavigationDelegate,XMLParserDelegate
         // 後で書く
         
     }
-    
     
     // ページの完了で呼び出す
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
