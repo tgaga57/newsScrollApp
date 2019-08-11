@@ -58,9 +58,6 @@ UITableViewDataSource,UITableViewDelegate,WKNavigationDelegate,XMLParserDelegate
         tableView.delegate = self
         tableView.dataSource = self
         
-        // parserとの接続
-        parser.delegate = self
-        
         //navigatiodelegateとの接続
         webView.navigationDelegate = self
         
@@ -88,6 +85,9 @@ UITableViewDataSource,UITableViewDelegate,WKNavigationDelegate,XMLParserDelegate
         
         // 記事情報を初期化
         articles = []
+        
+        // parserとの接続
+        parser.delegate = self
         
         // 解析の実行
         parser.parse()
@@ -159,13 +159,17 @@ UITableViewDataSource,UITableViewDelegate,WKNavigationDelegate,XMLParserDelegate
         let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "Cell")
         
         // セルの色
-        cell.backgroundColor = #colorLiteral(red: 1, green: 0.8633072972, blue: 1, alpha: 1)
+        cell.backgroundColor = #colorLiteral(red: 0.8021926284, green: 0.9940231442, blue: 0.9937842488, alpha: 1)
         
-        // テキストサイズとフォント
+        // 記事テキストサイズとフォント
         cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 15)
-        cell.textLabel?.textColor = #colorLiteral(red: 0.3451225162, green: 0.333977282, blue: 0.5054458976, alpha: 1)
+        cell.textLabel?.textColor = #colorLiteral(red: 0.1215686277, green: 0.01176470611, blue: 0.4235294163, alpha: 1)
         
+        cell.textLabel?.text = (articles[indexPath.row] as AnyObject).value(forKey: "title") as? String
+        
+        // 記事のurlのサイズとフォント
         cell.detailTextLabel?.font = UIFont.systemFont(ofSize: 13)
+        cell.detailTextLabel?.text = (articles[indexPath.row] as AnyObject).value(forKey: "link") as? String
         cell.detailTextLabel?.textColor = #colorLiteral(red: 0.2745098174, green: 0.4862745106, blue: 0.1411764771, alpha: 1)
         
         
@@ -185,7 +189,14 @@ UITableViewDataSource,UITableViewDelegate,WKNavigationDelegate,XMLParserDelegate
     // セルをタップをした時の処理
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        // 後で書く
+        // webviewを表示する
+        let linkURL = ((articles[indexPath.row] as AnyObject).value(forKey: "link") as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let urlStr = (linkURL?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed))!
+        guard let url = URL(string: urlStr) else {
+            return
+        }
+        let urlRequest = NSURLRequest(url: url)
+        webView.load(urlRequest as URLRequest)
         
     }
     
